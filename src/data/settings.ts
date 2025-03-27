@@ -9,6 +9,9 @@ export const seedSettings = async () => {
     { name: 'Can write', active: true },
     { name: 'Can click buttons', active: true },
     { name: 'Can change color', active: true },
+    { name: 'Can rotate', active: true },
+    { name: 'Can steal cursor', active: true },
+    { name: 'Can move', active: true },
   ];
 
 

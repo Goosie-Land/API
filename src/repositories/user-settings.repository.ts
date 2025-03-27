@@ -15,6 +15,10 @@ export class UserSettingsRepository {
     });
   }
 
+  async bulkCreate(userId: string, settingIds: string[]): Promise<UserSettings[]> {
+    return await UserSettings.bulkCreate(settingIds.map((settingId) => ({ userId, settingId })));
+  }
+
   async update(userId: string, settingId: string, settingsData: Partial<UserSettings>): Promise<UserSettings | null> {
     const settings = await UserSettings.findOne({ where: { userId, settingId } });
     if (!settings) return null;

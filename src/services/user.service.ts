@@ -39,9 +39,7 @@ export class UserService {
         const settings = await this.settingsRepository.getBy({ active: true });
 
         if (settings) {
-            for (const setting of settings) {
-                await this.userSettingsRepository.create(user.id, setting.id);
-            }
+            this.userSettingsRepository.bulkCreate(user.id, settings.map(setting => setting.id));
         }
 
         const updated = await this.getOneBy({ id: user.id });
