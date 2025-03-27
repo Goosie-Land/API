@@ -85,17 +85,12 @@ export class UpdateUserSettingsDto {
   @IsString()
   @IsNotEmpty()
   @Type(() => String)
-  userId!: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Type(() => String)
   settingId!: string;
 
   @IsBoolean()
-  @IsNotEmpty()
+  @IsOptional()
   @Type(() => Boolean)
-  isActive!: boolean;
+  isActive?: boolean;
 
   @IsOptional()
   @Type(() => Number)
@@ -126,21 +121,25 @@ export class FilterUserDto {
 export class UpdateUserDTO {
     @IsString()
     @IsNotEmpty()
+    @Expose()
     @Type(() => String)
     id!: string;
 
     @IsString()
-    @IsNotEmpty()
-    @Type(() => String)
-    username!: string;
-
-    @IsEmail()
-    @IsNotEmpty()
-    @Type(() => String)
-    email!: string;
-
     @IsOptional()
+    @Expose()
+    @Type(() => String)
+    username?: string;
+
+    @Expose()
+    @IsEmail()
+    @IsOptional()
+    @Type(() => String)
+    email?: string;
+
     @Type(() => Number)
+    @Expose()
+    @IsOptional()
     maxScore?: number;
 }
 

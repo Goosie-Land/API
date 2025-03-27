@@ -67,9 +67,10 @@ export class UserRepository {
   }
 
   async update(userId: string, userData: Partial<User>): Promise<User | null> {
-    const user = await User.findOne({ where: { userId } });
+    const data = this.sanitizeFilters(userData);
+    const user = await User.update(data, { where: { id: userId } });
     if (!user) return null;
-    return await user.update(userData);
+    return await User.findOne({ where: { id: userId } });
   }
 
   async getUsersByScore(): Promise<User[]> {

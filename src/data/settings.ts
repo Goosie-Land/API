@@ -12,6 +12,7 @@ export const seedSettings = async () => {
     { name: 'Can rotate', active: true },
     { name: 'Can steal cursor', active: true },
     { name: 'Can move', active: true },
+    { name: 'Can open tab', active: true },
   ];
 
 
