@@ -66,6 +66,12 @@ export class UserRepository {
    });
   }
 
+  async update(userId: string, userData: Partial<User>): Promise<User | null> {
+    const user = await User.findOne({ where: { userId } });
+    if (!user) return null;
+    return await user.update(userData);
+  }
+
   async getUsersByScore(): Promise<User[]> {
     return await User.findAll({ 
       order: [['maxScore', 'DESC']], 

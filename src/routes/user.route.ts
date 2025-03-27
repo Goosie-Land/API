@@ -6,5 +6,6 @@ const userController = new UserController();
 
 router.get('/', (req, res, next) => userController.getUsersByFilters(req, res, next));
 router.get('/byScore', (req, res, next) => userController.getUserByScore(req, res, next));
+router.put('/', (req, res, next) => userController.updateUser(req, res, next));
 
 export default router;

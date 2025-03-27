@@ -4,7 +4,7 @@ import { JWTService } from '../services/jwt.service';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { AppError } from '../utils/AppError';
-import { CreateUserDto, FilterUserDto, LogUserDto, UpdateUserSettingsDto, UserPresenter, UserSettingsPresenter } from '../dtos/user.dto';
+import { CreateUserDto, FilterUserDto, LogUserDto, UpdateUserDTO, UpdateUserSettingsDto, UserPresenter, UserSettingsPresenter } from '../dtos/user.dto';
 import { EncodedRequest } from '../utils/EncodedRequest';
 
 // filepath: d:/Projet Dev/OiePI/src/controllers/user.controller.ts
@@ -129,6 +129,27 @@ export class UserController {
             const decoded = await this.jwtService.verifyJWT(token);
             const user = await this.userService.getOneBy({ id: decoded.user.id })
             const presenter = plainToClass(UserPresenter, user, { excludeExtraneousValues: true });
+
+            res.status(200).json(presenter);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async updateUser(req: Request, res: Response, next: Function): Promise<void> {
+        try {
+            const updateUserData = plainToClass(UpdateUserDTO, req.body, { excludeExtraneousValues: true });
+            const dtoErrors = await validate(updateUserData);
+            if (dtoErrors.length > 0) {
+                const errors = dtoErrors.map(error => ({
+                    field: error.property,
+                    constraints: error.constraints ? Object.values(error.constraints) : []
+                }));
+                throw new AppError("Validation failed", 400, errors);
+            }
+
+            const updatedUser = await this.userService.updateUser(updateUserData);
+            const presenter = plainToClass(UserPresenter, updatedUser, { excludeExtraneousValues: true });
 
             res.status(200).json(presenter);
         } catch (error) {

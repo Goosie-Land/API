@@ -1,6 +1,6 @@
 import { UserRepository } from '../repositories/user.repository';
 import { IUser, User } from '../models/user.model';
-import { CreateUserDto, LogUserDto, UpdateUserSettingsDto } from '../dtos/user.dto';
+import { CreateUserDto, LogUserDto, UpdateUserSettingsDto, UpdateUserDTO } from '../dtos/user.dto';
 import { AppError } from '../utils/AppError';
 import { SettingsRepository } from '../repositories/settings.repository';
 import { UserSettingsRepository } from '../repositories/user-settings.repository';
@@ -49,6 +49,25 @@ export class UserService {
         }
 
         return updated;
+    }
+
+    async updateUser(userData: UpdateUserDTO): Promise<IUser> {
+        const user = await this.userRepository.getOneBy({ id: userData.id });
+        if (!user) {
+            throw new AppError("User not found", 404);
+        }
+
+        const updatedUser = await this.userRepository.update(userData.id, {
+            username: userData.username,
+            email: userData.email,
+            maxScore: userData.maxScore
+        });
+
+        if (!updatedUser) {
+            throw new AppError("Error while updating user", 500);
+        }
+
+        return updatedUser;
     }
 
     async getUsersByFilters(filters: Partial<User>): Promise<User[] | null> {
